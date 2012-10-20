@@ -2,6 +2,19 @@
 <html>
   <head>
     <title>Last Seen Facebook Prototype</title>
+
+    <style>
+.friend {
+background-color: gray;
+clear: both;
+float: left;
+border-color: black;
+border-width: 1px;
+border-style: dotted;
+width: 20%;
+}
+
+    </style>
   </head>
 
   <body>
@@ -52,13 +65,15 @@
         FB.api('/me', function(resp) {
           console.log('Good to see you, ' + resp.name + '.');
         });
-        FB.api('/me/friends', function(resp) {
+        FB.api('/me/friends?fields=picture.type(square),name', function(resp) {
           var f = document.getElementById('friends');
          
           for (var i = 0; i < resp.data.length; i++ ) {
 	    var fDiv = document.createElement('div');
             fDiv.className = 'friend';
-            fDiv.innerHTML = '<p>' + resp.data[i].name + '</p>';
+	    markup  = "<img src='" + resp.data[i].picture.data.url + "'/>";
+            markup += '<p>' + resp.data[i].name + '</p>';
+            fDiv.innerHTML = markup;
             f.appendChild(fDiv);
           };
         });
