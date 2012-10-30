@@ -1,0 +1,17 @@
+.friend p {
+    float: left;
+    padding-left: 10px;
+}
+.friend img {
+    float: left;
+}
+.friend {
+    background-color: white;
+    float: left;
+    border-color: black;
+    border-width: 2px;
+    border-style: solid;
+    width: 15%;
+    padding: 5px;
+    margin: 5px;
+}
