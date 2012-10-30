@@ -1,3 +1,5 @@
+var g = {};
+
 // Additional JS functions here
 window.fbAsyncInit = function() {
 
@@ -11,37 +13,63 @@ window.fbAsyncInit = function() {
         xfbml:  true
     });
 
+    checkLogin();
+};
+
+function checkLogin() {
     FB.getLoginStatus(function(response) {
         if (response.status === 'connected') {
+	    doWelcome();
             // connected
-            console.log('logged in!');
-            testAPI();
         } else if (response.status === 'not_authorized') {
             // not_authorized
-            login();
+	    askLogin();
         } else {
             // not logged in
-            login();
+	    askLogin();
         }
     });
 
+}
+
+function doWelcome() {
+    FB.api('/me', function(r){ 
+	g.name = r.name; 
+	$('#fb-status').text("You are logged into Facebook, " + g.name);
+    });
+
+    $('#fb-status').text("You are logged into Facebook...");
+
+    $('#access-button').val('Logout')
+        .one('click', logout);
+
+    testAPI();
 };
+
+function logout() {
+    FB.logout(askLogin);
+}
+
+function askLogin() {
+    $('#fb-status').text("You are not currently logged into Facebook.");
+
+    $('#access-button').val('Login')
+        .one('click', login);
+}
 
 function login() {
     FB.login(function(response) {
         if (response.authResponse) {
             // connected
+	    doWelcome();
         } else {
             // cancelled
+	    askLogin();
         }
     });
 };
 
 function testAPI() {
-    console.log('Welcome! Fetching your information...');
-    FB.api('/me', function(resp) {
-        console.log('Good to see you, ' + resp.name + '.');
-    });
     FB.api('/me/friends?fields=picture.type(square),name', function(resp) {
         var f = document.getElementById('friends');
         
