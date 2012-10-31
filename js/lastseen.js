@@ -74,12 +74,12 @@ function testAPI() {
         var f = document.getElementById('friends');
         
         for (var i = 0; i < resp.data.length; i++ ) {
-	    var fDiv = document.createElement('div');
-            fDiv.className = 'friend';
-	    markup  = "<img src='" + resp.data[i].picture.data.url + "'/>";
-            markup += '<p>' + resp.data[i].name + '</p>';
-            fDiv.innerHTML = markup;
-            f.appendChild(fDiv);
+	    var friend = $('<div/>')
+	                     .addClass('friend')
+	                     .append($('<img/>').prop('src', resp.data[i].picture.data.url))
+	                     .append($('<p/>').text( resp.data[i].name));
+	    friend.draggable();
+	    friend.appendTo($('#friends'));
         };
     });
 };
