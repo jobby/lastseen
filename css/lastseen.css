@@ -11,7 +11,17 @@
     border-color: black;
     border-width: 2px;
     border-style: solid;
-    width: 15%;
+    width: 320px;
+    height: 50px;
     padding: 5px;
     margin: 5px;
+}
+
+#selected-friends {
+    background-color: #eee;
+    overflow: hidden;
+}
+
+#selected-friends.activated {
+    background-color: #dde;
 }

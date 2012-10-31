@@ -1,9 +1,18 @@
+$(document).ready(init);
+
+function init() {
+    $('#selected-friends').sortable({
+	receive: function(e, ui) {
+	    $(ui.item).css({opacity: "1"}).fadeOut(function() {$(this).remove();});
+	    $(this).children().css({opacity: ""});
+	},
+    });
+}
+
 var g = {};
 
 // Additional JS functions here
 window.fbAsyncInit = function() {
-
-    console.log('doing some initialisation...');
 
     FB.init({
         appId: '405101322876456',
@@ -66,8 +75,7 @@ function login() {
             // cancelled
 	    askLogin();
         }
-    });
-};
+    });};
 
 function testAPI() {
     FB.api('/me/friends?fields=picture.type(square),name', function(resp) {
@@ -77,9 +85,25 @@ function testAPI() {
 	    var friend = $('<div/>')
 	                     .addClass('friend')
 	                     .append($('<img/>').prop('src', resp.data[i].picture.data.url))
-	                     .append($('<p/>').text( resp.data[i].name));
-	    friend.draggable();
-	    friend.appendTo($('#friends'));
+	                     .append($('<p/>').text( resp.data[i].name))
+	                     .data("fb", resp.data[i]);
+
+	    if (i < 7) { friend.clone(true).prependTo($('#selected-friends')); }
+
+	    friend.draggable({
+	        revert: "invalid",
+		connectToSortable: '#selected-friends',
+		helper: 'clone',
+		start: function(e, ui) {
+		    $(this).css({opacity: "0.3"});
+		},
+		stop: function(e, ui) {
+		    $(this).css({opacity: ""});
+		},
+
+	    });
+	    friend.prependTo($('#friends'));
+	    
         };
     });
 };
